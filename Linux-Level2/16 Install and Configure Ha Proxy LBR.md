@@ -16,9 +16,9 @@ b. Once done, you can access the website using StaticApp button on the top bar.
 # Solution
 1. Install haproxy
 
-   /usr/share/doc/haproxy/configuration.txt has detailed documentation
+   > /usr/share/doc/haproxy/configuration.txt has detailed documentation
   
-2. Edit default config file /etc/haproxy/haproxy.cfg
+2. Edit default config file ```/etc/haproxy/haproxy.cfg```
 
    Modify frontend main block to bind server port
    ```
