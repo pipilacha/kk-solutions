@@ -1,0 +1,80 @@
+# Add extra ip to eth1
+sudo ip address add 10.0.0.50/24 broadcast 10.0.0.255 dev eth1 
+
+# Add a local DNS entry for the database hostname "mydb.kodekloud.com" so that it can resolve to "10.0.0.50" IP address.
+sudo echo '10.0.0.50 mydb.kodekloud.com' | sudo tee -a /etc/hosts
+
+# Install "mariadb" database server on this server and "start/enable" its service.
+sudo dnf install mariadb-server -y
+sudo systemctl enable --now mariadb
+
+# Set a password for mysql root user to "S3cure#321"
+sudo mysql_secure_installation 
+
+# The "root" account is currently locked on "centos-host", please unlock it. Make user "root" a member of "wheel" group
+sudo usermod -U root
+sudo gpasswd -a root wheel
+
+# Create and run a new Docker container based on the "nginx" image. The container should be named as "myapp" and the port "80" on the host should be mapped to the port "80" on the container.
+sudo gpasswd -a bob docker
+docker run -d -p 80:80 --name myapp nginx
+
+# Create a bash script called "container-stop.sh" under "/home/bob/" which should be able to stop the "myapp" container. It should also display a message "myapp container stopped!"
+cat <<EOF > container-stop.sh
+#!/bin/bash
+
+if [[ -z $1 ]]
+then
+        cont_name='myapp'
+else
+        cont_name=$1
+fi
+
+stopped=$(docker stop $cont_name)
+
+if [[ $stopped = $cont_name ]]
+then
+        echo "$stopped container stopped!"
+else
+        echo $stopped
+fi
+EOF
+
+sudo chmod u+x container-stop.sh
+
+# Create a bash script called "container-start.sh" under "/home/bob/" which should be able to "start" the "myapp" container. It should also display a message "myapp container started!"
+cat <<EOF > container-start.sh
+#!/bin/bash
+  
+if [[ -z $1 ]]
+then
+        cont_name='myapp'
+else
+        cont_name=$1
+fi
+
+started=$(docker start $cont_name)
+
+if [[ $started = $cont_name ]]
+then
+        echo "$started container started!"
+else
+        echo $started
+fi
+EOF
+
+sudo chmod u+x container-sart.sh
+
+# Add a cron job for the "root" user which should run "container-stop.sh" script at "12am" everyday.
+# Add a cron job for the "root" user which should run "container-start.sh" script at "8am" everyday.
+sudo crontab -e
+0 0 * * * /home/bob/container-stop.sh
+0 8 * * * /home/bob/container-start.sh 
+
+# Edit the PAM configuration file for the "su" utility so that this utility only accepts the requests from the users that are part of the "wheel" group and the requests from the users should be accepted immediately, without asking for any password.
+sudo vim /etc/pam.d/su
+ Uncomment the following line to implicitly trust users in the "wheel" group.
+auth            sufficient      pam_wheel.so trust use_uid
+# Uncomment the following line to require a user to be in the "wheel" group.
+auth            required        pam_wheel.so use_uid
+
