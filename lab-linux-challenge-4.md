@@ -1,0 +1,41 @@
+```
+# Make directory /opt/appdate
+sudo mkdir -p /opt/appdata/files
+sudo mkdir -p /opt/appdata/hidden
+
+# Find the "hidden" files in "/home/bob/preserved" directory and copy them in "/opt/appdata/hidden/" directory 
+sudo find /home/bob/preserved/ -type f -name '.*' -exec cp '{}' /opt/appdata/hidden \;
+
+# Find the "non-hidden" files in "/home/bob/preserved" directory and copy them in "/opt/appdata/files/" directory 
+sudo find /home/bob/preserved/ -type f ! -name '.*' -exec cp '{}' /opt/appdata/files/ \;
+
+# Find and delete the files in "/opt/appdata" directory that contain a word ending with the letter "t"
+sudo rm -f $(sudo grep -lr 't$' /opt/appdata/)
+
+# Change all the occurrences of the word "yes" to "no" in all files present under "/opt/appdata/" directory.
+sudo sed -i 's/yes/no/g' $(sudo grep -lr 'yes' /opt/appdata/)
+
+# Change all the occurrences of the word "raw" to "processed" in all files present under "/opt/appdata/" directory. It must be a "case-insensitive" replacement, means all words must be replaced like "raw , Raw , RAW" etc.
+sudo sed -iE 's/[rR][aA][wW]/processed/g' $(sudo grep -lir 'raw' /opt/appdata/)
+
+# Add the "sticky bit" special permission on "/opt/appdata" directory
+sudo chmod +t /opt/appdata/
+
+# Create a "tar.gz" archive of "/opt/appdata" directory and save the archive to this file: "/opt/appdata.tar.gz"
+sudo tar -czf /opt/appdata.tar.gz /opt/appdata/
+
+#Create a "softlink" called "/home/bob/appdata.tar.gz" of "/opt/appdata.tar.gz" file.
+sudo ln -s /opt/appdata.tar.gz appdata.tar.gz
+
+# Make "bob" the "user" and the "group" owner of "/opt/appdata.tar.gz" file.
+sudo chown bob:bob /opt/appdata.tar.gz
+
+# The "user/group" owner should have "read only" permissions on "/opt/appdata.tar.gz" file and "others" should not have any permissions.
+sudo chmod 440 /opt/appdata.tar.gz
+
+# Create sript filter.sh . The script should filter the lines from "/opt/appdata.tar.gz" file which contain the word "processed", and save the filtered output in "/home/bob/filtered.txt" file. It must "overwrite" the existing contents of "/home/bob/filtered.txt" file
+cat <<EOF > filter.sh 
+> #!/bin/bash
+> tar -xzOf /opt/appdata.tar.gz | grep 'processed' > /home/bob/filtered.txt
+> EOF
+```
