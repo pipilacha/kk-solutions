@@ -1,0 +1,22 @@
+# Add google public dns in /etc/resolved.conf
+nameserver 8.8.8.8
+
+# Configure Nginx as a reverse proxy for the GoApp so that we can access the GoApp on port "80"
+# Start and Enable "nginx" service.
+sudo dnf install nginx -y
+Add proxy_pass http://localhost:8081; to location block in server block
+sudo systemctl enable --now nginx
+
+# Start and Enable "firewalld" service.
+# Add firewall rules to allow only incoming port "22", "80" and "8081".
+# The firewall rules must be permanent and effective immediately.
+sudo dnf install firewalld -y
+sudo systemctl enable --now firewalld
+sudo firewall-cmd --add-port 22/tcp
+sudo firewall-cmd --add-port 80/tcp
+sudo firewall-cmd --add-port 8081/tcp
+# bind interfaces to zone. As a end user you don't need this in most cases, because NetworkManager (or legacy network service) adds interfaces into zones automatically (according to ZONE= option from
+ifcfg-interface file) if NM_CONTROLLED=no is not set. You should do it only if there's no /etc/sysconfig/network-scripts/ifcfg-interface file.
+sudo firewall-cmd --add-interface=eth0@if13249
+sudo firewall-cmd --add-interface=eth1@if13251
+sudo firewall-cmd --runtime-to-permanent
