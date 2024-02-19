@@ -1,0 +1,21 @@
+# Create a group called "admins"
+sudo groupadd admins
+sudo useradd -m -s /bin/zsh -G admins david
+change david pass to D3vUd3raaw
+sudo useradd -m -s /bin/zsh -G admins natasha
+change natasha's pass to DwfawUd113
+visudo and add %admins ALL=(root) NOPASSWD:ALL
+
+
+sudo groupadd devs
+sudo chown --recursive bob:devs /data
+sudo chmod --recursive 770 /data/
+sudo setfacl -m g:admins:rwx /data/
+sudo useradd -m -s /bin/sh -G devs ray
+set pass D3vU3r321
+sudo useradd -m -s /bin/sh -G devs lisa
+set pass D3vUd3r123
+visudo and add %devs ALL=(root) NOPASSWD:/usr/bin/dnf
+/etc/security/limits.conf add  '@devs           -       nproc           30'
+sudo edquota -g devs -f /data/
+sudo quota -v -g devs
