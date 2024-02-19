@@ -1,4 +1,4 @@
-```
+
 # Make directory /opt/appdate
 sudo mkdir -p /opt/appdata/files
 sudo mkdir -p /opt/appdata/hidden
@@ -38,4 +38,3 @@ cat <<EOF > filter.sh
 > #!/bin/bash
 > tar -xzOf /opt/appdata.tar.gz | grep 'processed' > /home/bob/filtered.txt
 > EOF
-```
