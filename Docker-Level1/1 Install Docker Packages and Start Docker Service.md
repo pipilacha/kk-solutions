@@ -28,6 +28,32 @@ REDHAT_SUPPORT_PRODUCT="Red Hat Enterprise Linux 8"
 REDHAT_SUPPORT_PRODUCT_VERSION="CentOS Stream"
 ```
 2. Let's follow Docker's installation guide for CentOs: https://docs.docker.com/engine/install/centos/
+```
+Uninstall old versions
+
+sudo yum remove docker \
+                  docker-client \
+                  docker-client-latest \
+                  docker-common \
+                  docker-latest \
+                  docker-latest-logrotate \
+                  docker-logrotate \
+                  docker-engine
+
+
+Set up the repository
+
+Install the yum-utils package (which provides the yum-config-manager utility) and set up the repository.
+
+ sudo yum install -y yum-utils
+
+ sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+
+Install Docker Engine
+
+ sudo yum install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
 
 3. Finally let's start docker service
 ```
