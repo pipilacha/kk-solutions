@@ -31,7 +31,7 @@ spec:
 
 3. Apply the configuration:
 ```
-thor@jumphost ~$ kubectl apply -f nginx-pod.yaml 
+thor@jumphost ~$ kubectl apply -f httpd-pod.yaml 
 pod/pod-httpd created
 ```
 
