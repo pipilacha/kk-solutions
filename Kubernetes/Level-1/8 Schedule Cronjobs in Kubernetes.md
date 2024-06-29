@@ -31,11 +31,11 @@ spec:
       template:
         spec:
           containers:
-            - name: cron-nautilus
-              image: httpd:latest
-              command: ["/bin/echo"]
-              args: ["Welcome to xfusioncorp!"]
-            restartPolicy: OnFailure
+          - name: cron-nautilus
+            image: httpd:latest
+            command: ["/bin/echo"]
+            args: ["Welcome to xfusioncorp!"]
+          restartPolicy: OnFailure
 
 
 thor@jumphost ~$ kubectl apply -f nautilus-cronjob.yaml
