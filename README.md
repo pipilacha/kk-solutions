@@ -7,3 +7,6 @@ Linux challenges/tasks are a series of sys admin tasks, they include the task to
 
 ### Docker
 Docker related tasks and their solutions
+
+### Kubernetes
+K8s related task and their solutions
